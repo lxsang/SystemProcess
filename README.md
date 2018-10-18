@@ -6,7 +6,7 @@ Spawing \*NIX system process using posix_spawn
 Metacello new
 	repository: 'github://lxsang/SystemProcess';
 	baseline:'SystemProcess';
-	load: #default
+	load
 ```
 
 ## Usage Example
