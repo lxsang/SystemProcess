@@ -1,7 +1,7 @@
 # SystemProcess
 Spawning \*NIX system process using ```posix_spawn```
 
-# Usage Example
+## Usage Example
 
 Execute a command and redirect its stdout
 
