@@ -24,6 +24,16 @@ SystemProcess >> cleanup [
 	block := false
 ]
 
+{ #category : #accessing }
+SystemProcess >> environ [
+	|collection|
+	collection := OrderedCollection new.
+	Smalltalk os environment asDictionary keysAndValuesDo: [ :k :v|
+		collection add: k,'=',v
+	].
+	^collection 
+]
+
 { #category : #shell }
 SystemProcess >> fileActionSettingFor:name [
 	|st ptr|
@@ -115,7 +125,7 @@ SystemProcess >> redirectStdout [
 
 { #category : #shell }
 SystemProcess >> shellCommand: cmd [
-	^ self shellCommand: cmd env: nil 
+	^ self shellCommand: cmd env: self environ  
 ]
 
 { #category : #shell }
