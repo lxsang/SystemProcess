@@ -1,7 +1,15 @@
 # SystemProcess
 Spawing \*NIX system process using posix_spawn
 
-# Usage Example
+## Install
+```Smalltalk
+Metacello new
+	repository: 'github://lxsang/SystemProcess';
+	baseline:'SystemProcess';
+	load
+```
+
+## Usage Example
 
 Execute a command and redirect its stdout
 
