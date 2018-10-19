@@ -1,5 +1,5 @@
 # SystemProcess
-Spawing \*NIX system process using posix_spawn
+Spawning \*NIX system process using posix_spawn
 
 ## Install
 ```Smalltalk
