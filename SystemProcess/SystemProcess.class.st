@@ -146,7 +146,7 @@ SystemProcess >> shellCommand: cmd env: env [
 	fileaction  := self fileActionSettingFor:fname.
 	ostream ifNotNil:[[ self waitForOutput  ] forkAt: Processor userSchedulingPriority].
 	istream ifNotNil:[[ self waitForInput  ] forkAt: Processor userSchedulingPriority].
-	(ostream isNil & istream isNil & watch ) ifTrue: [ [self waitForFinish] forkAt: Processor userSchedulingPriority  ].
+	((ostream isNil) & (istream isNil) & watch ) ifTrue: [ [self waitForFinish] forkAt: Processor userSchedulingPriority  ].
 	self lib posixSpawn: status 
 			process: (cmd at:1)
 			fileAction: fileaction
