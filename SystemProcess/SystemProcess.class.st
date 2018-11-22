@@ -8,7 +8,8 @@ Class {
 		'master',
 		'oblock',
 		'fblock',
-		'block'
+		'block',
+		'watch'
 	],
 	#category : #SystemProcess
 }
@@ -79,6 +80,7 @@ SystemProcess >> initialize [
 	istream := nil.
 	ostream := nil.
 	block := false.
+	watch := true
 ]
 
 { #category : #accessing }
@@ -144,7 +146,7 @@ SystemProcess >> shellCommand: cmd env: env [
 	fileaction  := self fileActionSettingFor:fname.
 	ostream ifNotNil:[[ self waitForOutput  ] forkAt: Processor userSchedulingPriority].
 	istream ifNotNil:[[ self waitForInput  ] forkAt: Processor userSchedulingPriority].
-	(ostream isNil and: [ istream isNil ]) ifTrue: [ [self waitForFinish] forkAt: Processor userSchedulingPriority  ].
+	(ostream isNil & istream isNil & watch ) ifTrue: [ [self waitForFinish] forkAt: Processor userSchedulingPriority  ].
 	self lib posixSpawn: status 
 			process: (cmd at:1)
 			fileAction: fileaction
@@ -179,7 +181,7 @@ SystemProcess >> waitForFinish [
 		ws = 0
 	] whileTrue: [ 200 milliSeconds wait].
 	self processFinish.
-	Transcript  show: 'End of wait for input'; cr.
+	Transcript  show: 'End of wait for finish'; cr.
 ]
 
 { #category : #shell }
@@ -224,4 +226,14 @@ SystemProcess >> waitForOutput [
 	] whileTrue: [ count > 0 ifFalse:[ 200 milliSeconds wait ]].
 	self processFinish.
 	Transcript  show: 'End of wait for output'; cr.
+]
+
+{ #category : #accessing }
+SystemProcess >> watch [
+	^ watch
+]
+
+{ #category : #accessing }
+SystemProcess >> watch: anObject [
+	watch := anObject
 ]
