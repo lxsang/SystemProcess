@@ -18,14 +18,39 @@ LibSystemProcess class >> F_SETFL [
 ]
 
 { #category : #'C-constants' }
+LibSystemProcess class >> MAP_SHARED [
+	^16r1
+]
+
+{ #category : #'C-constants' }
+LibSystemProcess class >> O_CREAT [
+	^64
+]
+
+{ #category : #'C-constants' }
 LibSystemProcess class >> O_NONBLOCK [
 	Smalltalk os isMacOS ifTrue: [ ^4 ].
 	^4000
 ]
 
 { #category : #'C-constants' }
+LibSystemProcess class >> O_RDONLY [
+	^0
+]
+
+{ #category : #'C-constants' }
 LibSystemProcess class >> O_RDWR [
 	^2
+]
+
+{ #category : #'C-constants' }
+LibSystemProcess class >> PROT_READ [
+	^ 16r1
+]
+
+{ #category : #'C-constants' }
+LibSystemProcess class >> PROT_WRITE [
+	^ 16r2
 ]
 
 { #category : #'C-constants' }
@@ -84,6 +109,11 @@ LibSystemProcess >> fnctl: fd action: action flag: flag [
  	^ self ffiCall: #(int fcntl(int fd, int action, int flag)) module: LibC 
 ]
 
+{ #category : #lib }
+LibSystemProcess >> ftruncate:fd size: length [
+	^self ffiCall: #(int ftruncate(int fd, int length)) module: LibC
+]
+
 { #category : #writing }
 LibSystemProcess >> getReadWriteBufferOf: size [
 	^(FFIExternalArray externalNewType: 'char' size: size) getHandle
@@ -122,9 +152,25 @@ LibSystemProcess >> master [
 	
 ]
 
+{ #category : #lib }
+LibSystemProcess >> memcpyTo:ptr1 from: ptr2 size: length [
+	^ self ffiCall: #(void *memcpy(void* ptr1, const void* ptr2, int length)) module: LibC
+]
+
+{ #category : #lib }
+LibSystemProcess >> mmap:addr size: length prot: prot flags: flags fd:fd offset: offset [
+	^self ffiCall: #(void *mmap(void *addr, int length, int prot, int flags,
+                  int fd, int offset)) module: LibC
+]
+
 { #category : #'accessing platform' }
 LibSystemProcess >> moduleName [ 
 	^ ''
+]
+
+{ #category : #lib }
+LibSystemProcess >> munmap: addr length: length [
+	^ self ffiCall: #(int munmap(void *addr, int length)) module: LibC
 ]
 
 { #category : #lib }
@@ -160,6 +206,17 @@ LibSystemProcess >> setNonBlocking: fd [
 	st := self fnctl: fd action: self class F_SETFL flag: flag.
 	st = 0 ifFalse:[^self error: 'Cannot set nonblocking'].
 	^st
+]
+
+{ #category : #lib }
+LibSystemProcess >> shm_open:name flag: flag mode: mode [
+	^self ffiCall: #(int shm_open(const char *name, int flag, int mode)) module: LibRt 
+]
+
+{ #category : #lib }
+LibSystemProcess >> shm_unlink:name [
+	^ self ffiCall: #(int shm_unlink(const char *name)) module:LibRt
+	
 ]
 
 { #category : #lib }
