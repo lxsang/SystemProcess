@@ -24,12 +24,13 @@ SharedMemStream >> atEnd [
 	
 ]
 
-{ #category : #'instance creation' }
+{ #category : #'initialize-release' }
 SharedMemStream >> close [
 	"fp ifNil: [ ^self ].
 	self lib close:fp."
 	ptr ifNotNil: [ self lib munmap: ptr  length: self memSize  ].
 	self lib shm_unlink: self shName.
+	ptr := nil
 ]
 
 { #category : #accessing }
@@ -50,6 +51,11 @@ SharedMemStream >> initialize [
 	ostream := SharedQueue new.
 	id := Time now asMilliSeconds.
 	
+]
+
+{ #category : #accessing }
+SharedMemStream >> isOpen [
+	^ self ptr isNotNil 
 ]
 
 { #category : #'instance creation' }
@@ -99,13 +105,20 @@ SharedMemStream >> open [
 				offset: 0.
 	self lib close: fp.
 	ptr getHandle asInteger = -1 ifTrue:[^self error: 'Unable to map to memory'].
-	"[ self process ] forkAt: Processor userBackgroundPriority"
+	[ self process ] forkAt: Processor userBackgroundPriority
 ]
 
 { #category : #synchronization }
 SharedMemStream >> process [
+|mid|
 "read first 8 bytes of mem"
-
+[ self ptr isNotNil] whileTrue:[
+	mid := self readId.
+	mid = id ifFalse:[
+		mid > 0 ifTrue:[self readData].
+		self writeData: mid.
+	].
+].
 ]
 
 { #category : #accessing }
@@ -122,6 +135,15 @@ SharedMemStream >> read [
 	bytes := self lib getReadWriteBufferOf: anInt.
 	self lib memcpyTo: bytes from: self ptr + 8  size: anInt. 
 	^FLMaterializer  materializeFromByteArray:(FFIExternalArray fromHandle: bytes type: 'uint8' size: anInt) asByteArray.
+]
+
+{ #category : #synchronization }
+SharedMemStream >> readData [
+	|data|
+	data := self read.
+	self ready.
+	data ifNil: [ ^self ].
+	ostream nextPut: data
 ]
 
 { #category : #synchronization }
@@ -170,10 +192,19 @@ SharedMemStream >> shName: anObject [
 SharedMemStream >> write: anObject [
 	|fuel anInt|
 	fuel := FLSerializer serializeToByteArray: anObject.
-	anInt := id asByteArrayOfSize:4.
-	self lib memcpyTo: self ptr from: anInt   size: 4.
+	"lock the memory"
+	self lib memcpyTo: self ptr from: (-1 asByteArrayOfSize: 4)   size: 4.
 	anInt := fuel size asByteArrayOfSize: 4.
 	self lib memcpyTo: self ptr + 4 from: anInt   size: 4.
 	self lib memcpyTo: self ptr + 8 from: fuel   size: fuel size.
+	anInt := id asByteArrayOfSize:4.
+	self lib memcpyTo: self ptr from: anInt   size: 4.
 	
+]
+
+{ #category : #synchronization }
+SharedMemStream >> writeData:mid [
+	mid = -1 ifTrue:[^self]. 
+	istream atEnd ifTrue:[^self].
+	self write: istream next
 ]

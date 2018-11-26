@@ -25,11 +25,13 @@ InterVMTeleport >> __proxy: p [
 
 { #category : #'reflective operations' }
 InterVMTeleport >> doesNotUnderstand: msg [
-	|sel|
+	|sel stream|
 	target ifNil: [ ^self ].
 	sel := msg selector asString.
 	(target respondsTo: sel asSymbol) ifFalse:[^target doesNotUnderstand: msg]. 
-	^proxy run: sel of: target class. 
+	stream := proxy run: sel of: target class. 
+	target mainstream ifTrue:[ target iostream: stream ].
+	^stream
 ]
 
 { #category : #initialization }
