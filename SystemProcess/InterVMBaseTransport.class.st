@@ -14,6 +14,12 @@ InterVMBaseTransport class >> on:aProxy [
 	^self new on:aProxy; yourself
 ]
 
+{ #category : #'initialize-release' }
+InterVMBaseTransport >> close [
+	self iostream ifNotNil: [ self iostream close ].
+	self closePortal
+]
+
 { #category : #accessing }
 InterVMBaseTransport >> closePortal [
 	self teleport __close
