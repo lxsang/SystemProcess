@@ -1,5 +1,6 @@
 # SystemProcess
-Spawning \*NIX system process using posix_spawn
+* Spawning \*NIX system process using posix_spawn
+* Dispatch code in multiple VM, each VM runs on a separated system processes. Interprocess communication via shared memory
 
 ## Install
 ```Smalltalk
@@ -9,7 +10,7 @@ Metacello new
 	load
 ```
 
-## Usage Example
+## Process spawn Example
 
 Execute a command and redirect its stdout
 
@@ -41,3 +42,5 @@ o stdinStream nextPutAll: 'ls -al', crlf.
 "exit /bin/sh"
 o stdinStream nextPutAll: 'exit',crlf
 ```
+### InterVM example
+(contd.)
