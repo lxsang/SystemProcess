@@ -30,7 +30,10 @@ InterVMTeleport >> doesNotUnderstand: msg [
 	sel := msg selector asString.
 	(target respondsTo: sel asSymbol) ifFalse:[^target doesNotUnderstand: msg]. 
 	stream := proxy run: sel of: target class. 
-	target mainstream ifTrue:[ target iostream: stream ].
+	target mainstream ifTrue:[
+		target iostream ifNotNil: [ target iostream close ].
+		stream open.
+		target iostream: stream ].
 	^stream
 ]
 

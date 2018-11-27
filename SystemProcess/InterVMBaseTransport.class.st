@@ -23,7 +23,7 @@ InterVMBaseTransport >> closePortal [
 InterVMBaseTransport >> initialize [
 	portal := InterVMTeleport new.
 	portal << self.
-	iostream := SharedQueue new.
+	iostream :=  nil.
 	mainstream := false
 ]
 

@@ -78,7 +78,7 @@ InterVMProxy >> run: aMethod of: aClass [
 		self class imageFile pathString.
 		'eval'.
 		'--no-quit'.
-		aClass asString, ' new iostream: (SharedMemStream on:''',pname,''');',aMethod,'.'
+		aClass asString, ' new iostream: ((SharedMemStream on:''',pname,''') open:true; yourself);',aMethod,'.'
 	}.
 	self process watch: false.
 	self process shellCommand: args.
