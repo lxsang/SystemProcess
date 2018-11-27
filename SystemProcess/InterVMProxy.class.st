@@ -68,18 +68,22 @@ InterVMProxy >> resultFrom: topic ofType: type do: aBlock [
 
 { #category : #'as yet unclassified' }
 InterVMProxy >> run: aMethod of: aClass [
+	^ self run: aMethod of:aClass headless: false 
+]
+
+{ #category : #'as yet unclassified' }
+InterVMProxy >> run: aMethod of: aClass headless: headless [
 	|args pname|
 	process ifNil:[^self].
 	pname := '/',aMethod,'_',Time now asNanoSeconds asString.
-	args := { 
-		self class vmBin pathString.
-		"'-vm-display-null'."
-		'-vm-sound-null'.
-		self class imageFile pathString.
-		'eval'.
-		'--no-quit'.
-		aClass asString, ' new iostream: ((SharedMemStream on:''',pname,''') open:true; yourself);',aMethod,'.'
-	}.
+	args := OrderedCollection new.
+	args add: self class vmBin pathString.
+	headless ifTrue:[ args add: '-vm-display-null'].
+	args add: '-vm-sound-null'.
+	args add: self class imageFile pathString.
+	args add: 'eval'.
+	args add: '--no-quit'.
+	args add: aClass asString, ' new iostream: ((SharedMemStream on:''',pname,''') open:true; yourself);',aMethod,'.'.
 	self process watch: false.
 	self process shellCommand: args.
 	^ SharedMemStream on: pname.

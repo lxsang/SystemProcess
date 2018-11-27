@@ -22,7 +22,7 @@ InterVMTest >> process [
 	|i|
 	"teleport to get the stream"
 	i := 1.
-	self teleport calculate.
+	self teleport headless calculate.
 	[[ self iostream isOpen ] whileTrue: [ 
 		self iostream nextPut: i.
 		self iostream atEnd ifFalse:[

@@ -33,7 +33,8 @@ SharedMemStream >> close [
 	lock critical:[
 		rmem ifNotNil: [ self lib munmap: rmem  length: self memSize  ].
 		wmem ifNotNil: [ self lib munmap: wmem  length: self memSize  ].
-		self lib shm_unlink: self shName.
+		self lib shm_unlink: self shName,'_i'.
+		self lib shm_unlink: self shName,'_o'.
 		rmem := wmem := nil
 	]
 ]

@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'target',
-		'proxy'
+		'proxy',
+		'headless'
 	],
 	#category : #SystemProcess
 }
@@ -29,7 +30,7 @@ InterVMTeleport >> doesNotUnderstand: msg [
 	target ifNil: [ ^self ].
 	sel := msg selector asString.
 	(target respondsTo: sel asSymbol) ifFalse:[^target doesNotUnderstand: msg]. 
-	stream := proxy run: sel of: target class. 
+	stream := proxy run: sel of: target class headless: headless. 
 	target mainstream ifTrue:[
 		target iostream ifNotNil: [ target iostream close ].
 		stream open.
@@ -37,7 +38,14 @@ InterVMTeleport >> doesNotUnderstand: msg [
 	^stream
 ]
 
+{ #category : #accessing }
+InterVMTeleport >> headless [
+	headless := true.
+	^self
+]
+
 { #category : #initialization }
 InterVMTeleport >> initialize [
 	proxy := InterVMProxy new.
+	headless := false
 ]
