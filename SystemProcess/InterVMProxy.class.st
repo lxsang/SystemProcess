@@ -20,6 +20,7 @@ InterVMProxy class >> on: aRosProxy [
 
 { #category : #vm }
 InterVMProxy class >> vmBin [
+	Smalltalk os isMacOS ifTrue: [ ^Smalltalk vmDirectory asFileReference / 'Pharo.app'/'Contents'/'MacOS'/'Pharo' ].
 	^Smalltalk vmDirectory asFileReference / 'pharo'
 ]
 
@@ -78,8 +79,12 @@ InterVMProxy >> run: aMethod of: aClass headless: headless [
 	pname := '/',aMethod,'_',Time now asNanoSeconds asString.
 	args := OrderedCollection new.
 	args add: self class vmBin pathString.
-	headless ifTrue:[ args add: '-vm-display-null'].
-	args add: '-vm-sound-null'.
+	headless ifTrue:[ 
+		Smalltalk os isMacOS 
+			ifTrue:[ args add: '--headless']
+			ifFalse:[ args add: '-vm-display-null']].
+	Smalltalk os isMacOS ifFalse:[
+		args add: '-vm-sound-null'].
 	args add: self class imageFile pathString.
 	args add: 'eval'.
 	args add: '--no-quit'.

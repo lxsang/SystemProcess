@@ -24,6 +24,7 @@ LibSystemProcess class >> MAP_SHARED [
 
 { #category : #'C-constants' }
 LibSystemProcess class >> O_CREAT [
+	Smalltalk os isMacOS ifTrue: [ ^512 ].
 	^64
 ]
 
