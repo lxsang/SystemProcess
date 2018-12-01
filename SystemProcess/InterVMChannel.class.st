@@ -12,6 +12,6 @@ InterVMChannel class >> new [
 ]
 
 { #category : #'instance creation' }
-InterVMChannel >> initialize [
-	super initialize.
+InterVMChannel class >> slave [
+	^ super new
 ]

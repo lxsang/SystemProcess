@@ -10,14 +10,15 @@ Class {
 		'id',
 		'rmem',
 		'wmem',
-		'lock'
+		'lock',
+		'proc'
 	],
 	#category : #SystemProcess
 }
 
 { #category : #'instance creation' }
-SharedMemStream class >> on: shName [
-	^self new shName: shName; yourself
+SharedMemStream class >> on: shName process: p [
+	^self new shName: shName; proc: p; yourself
 ]
 
 { #category : #accessing }
@@ -36,7 +37,7 @@ SharedMemStream >> close [
 		self lib shm_unlink: self shName,'_i'.
 		self lib shm_unlink: self shName,'_o'.
 		rmem := wmem := nil
-	]
+	].
 ]
 
 { #category : #accessing }
@@ -130,6 +131,16 @@ SharedMemStream >> open: swap [
 ]
 
 { #category : #accessing }
+SharedMemStream >> proc [
+	^ proc
+]
+
+{ #category : #accessing }
+SharedMemStream >> proc: anObject [
+	proc := anObject
+]
+
+{ #category : #accessing }
 SharedMemStream >> process [
 |mid|
 "read first 8 bytes of mem"
@@ -203,6 +214,13 @@ SharedMemStream >> shName [
 { #category : #accessing }
 SharedMemStream >> shName: anObject [
 	shName := anObject
+]
+
+{ #category : #'initialize-release' }
+SharedMemStream >> terminate [
+	self close.
+	proc ifNil: [ ^self ].
+	proc cleanup
 ]
 
 { #category : #synchronization }

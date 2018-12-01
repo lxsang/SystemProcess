@@ -2,8 +2,7 @@ Class {
 	#name : #InterVMProxy,
 	#superclass : #Object,
 	#instVars : [
-		'proxy',
-		'process'
+		'proxy'
 	],
 	#category : #SystemProcess
 }
@@ -24,32 +23,9 @@ InterVMProxy class >> vmBin [
 	^Smalltalk vmDirectory asFileReference / 'pharo'
 ]
 
-{ #category : #'initialize-release' }
-InterVMProxy >> close [
-	process ifNil: [ ^self ].
-	process cleanup.
-	process := nil.
-]
-
-{ #category : #initialization }
-InterVMProxy >> initialize [
-	process := SystemProcess new.
-	"proxy := PhaROSPackage new."
-]
-
 { #category : #'instance creation' }
 InterVMProxy >> on: rosProxy [
 	self proxy: rosProxy 
-]
-
-{ #category : #accessing }
-InterVMProxy >> process [
-	^ process
-]
-
-{ #category : #accessing }
-InterVMProxy >> process: anObject [
-	process := anObject
 ]
 
 { #category : #accessing }
@@ -69,8 +45,8 @@ InterVMProxy >> run: aMethod of: aClass [
 
 { #category : #running }
 InterVMProxy >> run: aMethod of: aClass headless: headless [
-	|args pname|
-	process ifNil:[^self].
+	|args pname process|
+	process := SystemProcess new.
 	pname := '/',aMethod,'_',Time now asNanoSeconds asString.
 	args := OrderedCollection new.
 	args add: self class vmBin pathString.
@@ -83,8 +59,8 @@ InterVMProxy >> run: aMethod of: aClass headless: headless [
 	args add: self class imageFile pathString.
 	args add: 'eval'.
 	args add: '--no-quit'.
-	args add: aClass asString, ' new iostream: ((SharedMemStream on:''',pname,''') open:true; yourself);',aMethod,'.'.
-	self process watch: false.
-	self process shellCommand: args.
-	^ SharedMemStream on: pname.
+	args add: aClass asString, ' slave iostream: ((SharedMemStream on:''',pname,''' process:nil) open:true; yourself);',aMethod,'.'.
+	process watch: false.
+	process shellCommand: args.
+	^ SharedMemStream on: pname process: process.
 ]

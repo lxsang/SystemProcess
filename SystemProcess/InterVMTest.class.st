@@ -12,8 +12,7 @@ i := 0.
 		].
 		i := i + 1.
 	]] forkAt: Processor userBackgroundPriority.
-stream close.
-o close.
+stream terminate.
 "
 Class {
 	#name : #InterVMTest,

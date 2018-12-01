@@ -23,8 +23,7 @@ InterVMTeleport >> __proxy: p [
 InterVMTeleport >> close [
 	target ifNotNil: [
 		target iostream ifNotNil: [ target iostream close ].
-	].
-	proxy close
+	]
 ]
 
 { #category : #'reflective operations' }
