@@ -6,7 +6,7 @@ Class {
 
 { #category : #'accessing platform' }
 LibRt >> macModuleName [
-	^self shouldBeImplemented 
+	^ 'libc.dylib'
 ]
 
 { #category : #'accessing platform' }
