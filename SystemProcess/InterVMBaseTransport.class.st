@@ -3,8 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'portal',
-		'iostream',
-		'mainstream'
+		'iostream'
 	],
 	#category : #SystemProcess
 }
@@ -16,13 +15,7 @@ InterVMBaseTransport class >> on:aProxy [
 
 { #category : #'initialize-release' }
 InterVMBaseTransport >> close [
-	self iostream ifNotNil: [ self iostream close ].
-	self closePortal
-]
-
-{ #category : #accessing }
-InterVMBaseTransport >> closePortal [
-	self teleport __close
+	self teleport close
 ]
 
 { #category : #initialization }
@@ -30,7 +23,6 @@ InterVMBaseTransport >> initialize [
 	portal := InterVMTeleport new.
 	portal << self.
 	iostream :=  nil.
-	mainstream := false
 ]
 
 { #category : #accessing }
@@ -41,16 +33,6 @@ InterVMBaseTransport >> iostream [
 { #category : #accessing }
 InterVMBaseTransport >> iostream: anObject [
 	iostream := anObject
-]
-
-{ #category : #accessing }
-InterVMBaseTransport >> mainstream [
-	^ mainstream
-]
-
-{ #category : #accessing }
-InterVMBaseTransport >> mainstream: anObject [
-	mainstream := anObject
 ]
 
 { #category : #accessing }

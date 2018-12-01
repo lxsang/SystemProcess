@@ -62,17 +62,12 @@ InterVMProxy >> proxy: anObject [
 	proxy := anObject
 ]
 
-{ #category : #'as yet unclassified' }
-InterVMProxy >> resultFrom: topic ofType: type do: aBlock [
-	"subcriber to a topic"
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #running }
 InterVMProxy >> run: aMethod of: aClass [
 	^ self run: aMethod of:aClass headless: false 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #running }
 InterVMProxy >> run: aMethod of: aClass headless: headless [
 	|args pname|
 	process ifNil:[^self].

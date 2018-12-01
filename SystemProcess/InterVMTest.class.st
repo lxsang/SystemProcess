@@ -1,3 +1,20 @@
+"
+usage:
+
+o := InterVMTest new.
+stream := o calculate.
+stream open.
+i := 0.
+	[[ stream isOpen ] whileTrue: [ 
+		stream nextPut: i.
+		stream atEnd ifFalse:[
+			Transcript show: 'get: ', stream next asString; cr.	
+		].
+		i := i + 1.
+	]] forkAt: Processor userBackgroundPriority.
+stream close.
+o close.
+"
 Class {
 	#name : #InterVMTest,
 	#superclass : #InterVMChannel,
@@ -15,20 +32,4 @@ InterVMTest >> calculate [
 			self iostream nextPut: val
 		]
 	]] forkAt: Processor userBackgroundPriority 
-]
-
-{ #category : #accessing }
-InterVMTest >> process [
-	|i|
-	"teleport to get the stream"
-	i := 1.
-	self teleport headless calculate.
-	[[ self iostream isOpen ] whileTrue: [ 
-		self iostream nextPut: i.
-		self iostream atEnd ifFalse:[
-			Transcript show: 'get: ', self iostream next asString; cr.	
-		].
-		i := i + 1.
-	]] forkAt: Processor userBackgroundPriority  
-	
 ]

@@ -5,7 +5,13 @@ Class {
 }
 
 { #category : #'instance creation' }
+InterVMChannel class >> new [
+	|o|
+	o := super new.
+	^ o teleport
+]
+
+{ #category : #'instance creation' }
 InterVMChannel >> initialize [
 	super initialize.
-	mainstream := true
 ]
