@@ -1,16 +1,14 @@
 "
 usage:
-stream := InterVMTest new process.
-stream open.
-i := 0.
-	[[ stream isOpen ] whileTrue: [ 
-		stream nextPut: i.
-		stream atEnd ifFalse:[
-			Transcript show: 'get: ', stream next asString; cr.	
+portal := InterVMTest new.
+
+[[ portal iostream isOpen ] whileTrue: [ 
+		portal iostream atEnd ifFalse:[
+			Transcript show: 'get: ', portal iostream next asString; cr.	
 		].
-		i := i + 1.
 	]] forkAt: Processor userBackgroundPriority.
-stream terminate
+portal processData: 1000.
+portal close
 "
 Class {
 	#name : #InterVMTest,
