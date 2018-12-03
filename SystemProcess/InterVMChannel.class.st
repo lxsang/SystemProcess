@@ -8,7 +8,7 @@ Class {
 InterVMChannel class >> new [
 	|o|
 	o := super new.
-	^ o teleport
+	^o teleport
 ]
 
 { #category : #'instance creation' }

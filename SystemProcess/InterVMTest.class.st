@@ -1,8 +1,6 @@
 "
 usage:
-
-o := InterVMTest new.
-stream := o calculate.
+stream := InterVMTest new process.
 stream open.
 i := 0.
 	[[ stream isOpen ] whileTrue: [ 
@@ -12,23 +10,18 @@ i := 0.
 		].
 		i := i + 1.
 	]] forkAt: Processor userBackgroundPriority.
-stream terminate.
+stream terminate
 "
 Class {
 	#name : #InterVMTest,
-	#superclass : #InterVMChannel,
+	#superclass : #InterVMSlave,
 	#category : #SystemProcess
 }
 
-{ #category : #'as yet unclassified' }
-InterVMTest >> calculate [
+{ #category : #accessing }
+InterVMTest >> processData: data [
 	|val|
-	[[ self iostream isOpen ] whileTrue: [ 
-		self iostream atEnd ifFalse:[
-			val := self iostream next.
-			Transcript show:'Get: ', val asString;cr.
-			val := val*100.
-			self iostream nextPut: val
-		]
-	]] forkAt: Processor userBackgroundPriority 
+	Transcript show:'Get: ', data asString;cr.
+	val := data*100.
+	self iostream nextPut: val
 ]

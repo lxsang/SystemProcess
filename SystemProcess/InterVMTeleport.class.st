@@ -29,10 +29,10 @@ InterVMTeleport >> close [
 { #category : #'reflective operations' }
 InterVMTeleport >> doesNotUnderstand: msg [
 	|sel stream|
-	target ifNil: [ ^self ].
-	sel := msg selector asString.
-	(target respondsTo: sel asSymbol) ifFalse:[^target doesNotUnderstand: msg]. 
-	stream := proxy run: sel of: target class headless: headless. 
+	target ifNil: [ ^nil ].
+	sel := msg selector.
+	(target respondsTo: sel) ifFalse:[^target doesNotUnderstand: msg]. 
+	stream := proxy run: sel asString of: target class headless: headless. 
 	^stream
 ]
 
