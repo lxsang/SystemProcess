@@ -5,11 +5,29 @@ Class {
 }
 
 { #category : #'instance creation' }
-InterVMAvatarObject class >> new [
+InterVMAvatarObject class >> headfull [
 	|o|
 	o := super new.
-	o teleport process.
+	o teleport  process.
 	^o teleport
+]
+
+{ #category : #'instance creation' }
+InterVMAvatarObject class >> headless [
+	|o|
+	o := super new.
+	o teleport headless process.
+	^o teleport
+]
+
+{ #category : #'instance creation' }
+InterVMAvatarObject class >> methodByName: aName [
+	[ ^self methodNamed: aName ] on: Error do: [ ^ self superclass methodByName: aName ] 
+]
+
+{ #category : #'instance creation' }
+InterVMAvatarObject class >> new [
+	^self headless
 ]
 
 { #category : #'instance creation' }

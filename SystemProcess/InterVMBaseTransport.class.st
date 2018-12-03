@@ -9,6 +9,11 @@ Class {
 }
 
 { #category : #'instance creation' }
+InterVMBaseTransport class >> methodByName: aName [
+	^self methodNamed: aName  
+]
+
+{ #category : #'instance creation' }
 InterVMBaseTransport class >> on:aProxy [
 	^self new on:aProxy; yourself
 ]

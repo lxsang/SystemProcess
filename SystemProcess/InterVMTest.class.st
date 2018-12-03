@@ -17,6 +17,12 @@ Class {
 }
 
 { #category : #accessing }
+InterVMTest >> masterMsg [
+	<master>
+	Transcript show: 'this message run on master side'; cr.
+]
+
+{ #category : #accessing }
 InterVMTest >> processData: data [
 	|val|
 	Transcript show:'Get: ', data asString;cr.
