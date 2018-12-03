@@ -1,11 +1,11 @@
 Class {
-	#name : #InterVMSlave,
+	#name : #InterVMAvatarObject,
 	#superclass : #InterVMBaseTransport,
 	#category : #SystemProcess
 }
 
 { #category : #'instance creation' }
-InterVMSlave class >> new [
+InterVMAvatarObject class >> new [
 	|o|
 	o := super new.
 	o teleport process.
@@ -13,19 +13,19 @@ InterVMSlave class >> new [
 ]
 
 { #category : #'instance creation' }
-InterVMSlave class >> slave [
+InterVMAvatarObject class >> slave [
 	^ super new
 ]
 
 { #category : #initialization }
-InterVMSlave >> initialize [
+InterVMAvatarObject >> initialize [
 	portal := InterVMPortal new.
 	portal << self.
 	iostream :=  nil.
 ]
 
 { #category : #accessing }
-InterVMSlave >> process [
+InterVMAvatarObject >> process [
 	|val|
 	[[ self iostream isOpen ] whileTrue: [ 
 		self iostream atEnd ifFalse:[
@@ -43,6 +43,6 @@ InterVMSlave >> process [
 ]
 
 { #category : #accessing }
-InterVMSlave >> processData:data [
+InterVMAvatarObject >> processData:data [
 	^self subclassResponsibility 
 ]
