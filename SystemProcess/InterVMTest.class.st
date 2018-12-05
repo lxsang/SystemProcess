@@ -12,7 +12,7 @@ portal close
 "
 Class {
 	#name : #InterVMTest,
-	#superclass : #InterVMAvatarObject,
+	#superclass : #InterVMChannel,
 	#category : #SystemProcess
 }
 
