@@ -19,8 +19,9 @@ InterVMProxy class >> on: aRosProxy [
 
 { #category : #vm }
 InterVMProxy class >> vmBin [
-	Smalltalk os isMacOS ifTrue: [ ^Smalltalk vmDirectory asFileReference / 'Pharo.app'/'Contents'/'MacOS'/'Pharo' ].
-	^Smalltalk vmDirectory asFileReference / 'pharo'
+	"Smalltalk os isMacOS ifTrue: [ ^Smalltalk vmDirectory asFileReference / 'Pharo.app'/'Contents'/'MacOS'/'Pharo' ].
+	^Smalltalk vmDirectory asFileReference / 'pharo'"
+	^ Smalltalk vmBinary asFileReference 
 ]
 
 { #category : #'instance creation' }

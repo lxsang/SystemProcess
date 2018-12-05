@@ -156,13 +156,15 @@ SharedMemStream >> process [
 
 { #category : #synchronization }
 SharedMemStream >> read [
-	|mid anInt bytes|
+	|mid anInt bytes obj|
 	mid := self readIdFrom: rmem.
 	mid = id ifTrue:[^nil].
 	anInt := self readSize.
 	bytes := self lib getReadWriteBufferOf: anInt.
 	self lib memcpyTo: bytes from: rmem + 8  size: anInt. 
-	^FLMaterializer  materializeFromByteArray:(FFIExternalArray fromHandle: bytes type: 'uint8' size: anInt) asByteArray.
+	obj := FLMaterializer  materializeFromByteArray:(FFIExternalArray fromHandle: bytes type: 'uint8' size: anInt) asByteArray.
+	bytes free.
+	^obj
 ]
 
 { #category : #synchronization }
