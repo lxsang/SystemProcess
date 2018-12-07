@@ -1,6 +1,6 @@
 # SystemProcess
 * Spawning \*NIX system process using posix_spawn
-* Dispatch code in multiple VMs, each VM runs on a separated system process. Inter-processes communication via shared memory
+* Dispatching code to multiple VMs, each VM runs on a separated system process. Inter-processes communication via shared memory
 
 ## Install
 ```Smalltalk
