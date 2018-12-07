@@ -1,5 +1,5 @@
 # SystemProcess
-* Spawning \*NIX system process using posix_spawn
+* Spawning Posix compatible system process using posix_spawn
 * Dispatching code to multiple VMs, each VM runs on a separated system process. Inter-processes communication via shared memory
 
 ## Install
@@ -43,4 +43,4 @@ o stdinStream nextPutAll: 'ls -al', crlf.
 o stdinStream nextPutAll: 'exit',crlf
 ```
 ### InterVM example
-(contd.)
+Please refer to this post: [https://blog.lxsang.me/post/id/25](https://blog.lxsang.me/post/id/25)
