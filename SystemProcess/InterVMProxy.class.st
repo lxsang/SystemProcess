@@ -2,7 +2,8 @@ Class {
 	#name : #InterVMProxy,
 	#superclass : #Object,
 	#instVars : [
-		'proxy'
+		'proxy',
+		'memSize'
 	],
 	#category : #SystemProcess
 }
@@ -22,6 +23,21 @@ InterVMProxy class >> vmBin [
 	"Smalltalk os isMacOS ifTrue: [ ^Smalltalk vmDirectory asFileReference / 'Pharo.app'/'Contents'/'MacOS'/'Pharo' ].
 	^Smalltalk vmDirectory asFileReference / 'pharo'"
 	^ Smalltalk vmBinary asFileReference 
+]
+
+{ #category : #initialization }
+InterVMProxy >> initialize [
+	memSize := 512 Kb
+]
+
+{ #category : #accessing }
+InterVMProxy >> memSize [
+	^ memSize
+]
+
+{ #category : #accessing }
+InterVMProxy >> memSize: anObject [
+	memSize := anObject
 ]
 
 { #category : #'instance creation' }
@@ -60,8 +76,8 @@ InterVMProxy >> run: aMethod of: aClass headless: headless [
 	args add: self class imageFile pathString.
 	args add: 'eval'.
 	args add: '--no-quit'.
-	args add: aClass asString, ' slave iostream: ((SharedMemStream on:''',pname,''' process:nil) open:true; yourself);',aMethod,'.'.
+	args add: aClass asString, ' slave iostream: ((SharedMemStream on:''',pname,''' process:nil size: ', self memSize asString ,' ) open:true; yourself);',aMethod,'.'.
 	process watch: false.
 	process shellCommand: args.
-	^ SharedMemStream on: pname process: process.
+	^ SharedMemStream on: pname process: process size: self memSize.
 ]

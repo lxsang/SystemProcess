@@ -51,6 +51,11 @@ InterVMBaseTransport >> proxy: p [
 ]
 
 { #category : #accessing }
+InterVMBaseTransport >> setMemSize: memSize [
+	portal __size: memSize 
+]
+
+{ #category : #accessing }
 InterVMBaseTransport >> teleport [
 	^portal
 ]

@@ -20,6 +20,11 @@ InterVMTeleport >> __proxy: p [
 ]
 
 { #category : #accessing }
+InterVMTeleport >> __size: memSize [
+	proxy memSize: memSize
+]
+
+{ #category : #accessing }
 InterVMTeleport >> close [
 	target ifNotNil: [
 		target iostream ifNotNil: [ target iostream close ].

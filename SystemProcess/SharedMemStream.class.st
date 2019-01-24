@@ -21,6 +21,11 @@ SharedMemStream class >> on: shName process: p [
 	^self new shName: shName; proc: p; yourself
 ]
 
+{ #category : #'instance creation' }
+SharedMemStream class >> on: shName process: p size: aSize [
+	^self new shName: shName; memSize: aSize;  proc: p; yourself
+]
+
 { #category : #accessing }
 SharedMemStream >> atEnd [
 	^ ostream atEnd
@@ -73,7 +78,7 @@ SharedMemStream >> id [
 { #category : #initialization }
 SharedMemStream >> initialize [
 	super initialize.
-	memSize :=  512 Kb.
+	memSize :=  500 Kb.
 	istream := SharedQueue new.
 	ostream := SharedQueue new.
 	id := Time now asMilliSeconds.
@@ -124,6 +129,7 @@ SharedMemStream >> open [
 SharedMemStream >> open: swap [
 	|tmp|
 	self shName ifNil: [ ^self error:'Shared name is empty' ].
+	Transcript show: 'memsize is', memSize asString; cr.
 	rmem := self getSharedMem: self shName, '_i'.
 	wmem := self getSharedMem: self shName, '_o'.
 	swap ifTrue:[tmp := rmem. rmem := wmem. wmem := tmp].

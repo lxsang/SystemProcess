@@ -13,10 +13,28 @@ InterVMChannel class >> headfull [
 ]
 
 { #category : #'instance creation' }
+InterVMChannel class >> headfull: size [
+	|o|
+	o := super new.
+	o setMemSize: size.
+	o teleport  process.
+	^o teleport
+]
+
+{ #category : #'instance creation' }
 InterVMChannel class >> headless [
 	|o|
 	o := super new.
 	o teleport headless process.
+	^o teleport
+]
+
+{ #category : #'instance creation' }
+InterVMChannel class >> headless: memSize [
+	|o|
+	o := super new.
+	o setMemSize: memSize.
+	o teleport  process.
 	^o teleport
 ]
 
@@ -28,6 +46,11 @@ InterVMChannel class >> methodByName: aName [
 { #category : #'instance creation' }
 InterVMChannel class >> new [
 	^self headless
+]
+
+{ #category : #'instance creation' }
+InterVMChannel class >> new: memSize [
+	^self headless: memSize
 ]
 
 { #category : #'instance creation' }
