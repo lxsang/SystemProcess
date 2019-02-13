@@ -10,7 +10,7 @@ Class {
 { #category : #accessing }
 InterVMPortal >> close [
 	super close.
-	iostream ifNotNil: [ 
+	iostream ifNotNil: [
 		iostream terminate
 	]
 ]

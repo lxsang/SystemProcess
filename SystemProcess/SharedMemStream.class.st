@@ -152,6 +152,8 @@ SharedMemStream >> process [
 "read first 8 bytes of mem"
 [ self isOpen] whileTrue:[
 	lock critical:[
+		rmem ifNil: [ ^self ].
+		wmem ifNil: [ ^self ].
 		mid := self readIdFrom:rmem.
 		mid > 0 ifTrue:[self readData ].
 		mid := self readIdFrom: wmem.
